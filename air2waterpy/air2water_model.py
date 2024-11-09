@@ -7,34 +7,34 @@ import numpy as np
 from numba import njit
 
 @njit()
-def _a2w(a1, a2, a3, a4, a5, a6, Ta, Tw, T_Ty, Th):
-    # calculate the stratification first
+def _a2w(a1, a2, a3, a4, a5, a6, 
+         a7, a8
+         Ta, Tw, T_Ty, Th):
+    # step wise calculate the temperature increment
     if Tw >= Th:
         delta = np.exp(-(Tw - Th)/a4)
         if delta == 0:
             delta = 1e-3
-        
     else:
-        delta = 1
-    
+        if a7 == 0:
+            delta = 1
+        else:
+            delta = np.exp(-(th - tw)/a7) + np.exp(-tw/a8)
     # delta has to be larger than 0
     k = (a1 + a2 * Ta - a3 * Tw + a5 * np.cos(2 * np.pi * (T_Ty - a6) ))/delta
 
     return k
 
 @njit()
-def run_air2water6p(ta, 
+def run_air2water(ta, 
                     t_ty,
                     th, 
                     tw_init, 
                     tw_ice,
-                    # num_mod,
+                    model_version,
                     params):
-    """Implementation of the GR4J model.
+    """Implementation of the air2water model.
     
-    This function should be called via the .simulate() function of the air2water6p
-    class and not directly. It is kept in a separate file for less confusion
-    if anyone wants to inspect the actual model routine.
     
     The naming of the variables is kept as in the original publication [1].
     
@@ -52,57 +52,59 @@ def run_air2water6p(ta,
     guidelines, challenges, and future perspectives, 
     Advances in Oceanography and Limnology, 7:36-50, DOI: http://dx.doi.org/10.4081/aiol.2016.5791
         
-    """
+    """    
     # Number of simulation timesteps
     num_timesteps = len(ta)
     
-    # Unpack the model parameters
-    a1 = params['a1']
-    a2 = params['a2']
-    a3 = params['a3']
-    a4 = params['a4']
-    a5 = params['a5']
-    a6 = params['a6']
-    
+    # Unpack the model parameters based on the model version
+    if model_version == "6p":
+        a1 = params['a1']
+        a2 = params['a2']
+        a3 = params['a3']
+        a4 = params['a4']
+        a5 = params['a5']
+        a6 = params['a6']
+        a7 = 0
+        a8 = 0
+    elif model_version == "8p":
+        a1 = params['a1']
+        a2 = params['a2']
+        a3 = params['a3']
+        a4 = params['a4']
+        a5 = params['a5']
+        a6 = params['a6']
+        a7 = params['a7']
+        a8 = params['a8']
+    else:
+        print("Select correct model version. '6p' or '8p'")
+        return
     # initialize empty arrays for lake surface water temperature
     tw = np.zeros(num_timesteps, np.float64)
     
     # set initial values
     tw[0] = tw_init
     
-    # Start the model simulation loop
+    # Start the model simulation
     # Use the forward RK45 explicit solution
-    # time step dt = 1
-    
-    # if num_mod == "RK45":    
-    
+    # time step dt = 1 day
     for t in range(1, num_timesteps):
-        
         # try:      
-        k1 = _a2w(a1, a2, a3, a4, a5, a6, 
+        k1 = _a2w(a1, a2, a3, a4, a5, a6, a7, a8,
                     ta[t-1], tw[t-1], t_ty[t-1], th)
         
-        k2 = _a2w(a1, a2, a3, a4, a5, a6, 
+        k2 = _a2w(a1, a2, a3, a4, a5, a6, a7, a8,
                     (ta[t-1] + ta[t])/2, tw[t-1] + 0.5 * k1, (t_ty[t-1] + t_ty[t])/2, th)
         
-        k3 = _a2w(a1, a2, a3, a4, a5, a6, 
+        k3 = _a2w(a1, a2, a3, a4, a5, a6, a7, a8,
                     (ta[t-1] + ta[t])/2, tw[t-1] + 0.5 * k2, (t_ty[t-1] + t_ty[t])/2, th)
         
-        k4 = _a2w(a1, a2, a3, a4, a5, a6, 
+        k4 = _a2w(a1, a2, a3, a4, a5, a6, a7, a8,
                     ta[t], tw[t-1] + k3, t_ty[t], th)
         
         tw[t] = tw[t-1] + 1/6 * (k1 + 2.0 * k2 + 2.0 * k3 + k4)
 
-        # except:
-        #     # this situation often happen when the paramter is not right
-        #     # the a4 leads to a break of delta
-        #     # raise ValueError(f"{delta}")
-        #     # tw[t] = tw[t-1]
-
         # set the lower bound of the temperature when ice covered
         tw[tw < tw_ice] = tw_ice
-
-    # print("successfully route once")
     
     # return all but the artificial 0's step
     return tw
