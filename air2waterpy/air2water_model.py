@@ -8,7 +8,7 @@ from numba import njit
 
 @njit()
 def _a2w(a1, a2, a3, a4, a5, a6, 
-         a7, a8
+         a7, a8,
          Ta, Tw, T_Ty, Th):
     # step wise calculate the temperature increment
     if Tw >= Th:
@@ -16,10 +16,10 @@ def _a2w(a1, a2, a3, a4, a5, a6,
         if delta == 0:
             delta = 1e-3
     else:
-        if a7 == 0:
+        if np.logical_and(a7 == 0, a8 == 0):
             delta = 1
         else:
-            delta = np.exp(-(th - tw)/a7) + np.exp(-tw/a8)
+            delta = np.exp(-(Th - Tw)/a7) + np.exp(-Tw/a8)
     # delta has to be larger than 0
     k = (a1 + a2 * Ta - a3 * Tw + a5 * np.cos(2 * np.pi * (T_Ty - a6) ))/delta
 
@@ -27,12 +27,12 @@ def _a2w(a1, a2, a3, a4, a5, a6,
 
 @njit()
 def run_air2water(ta, 
-                    t_ty,
-                    th, 
-                    tw_init, 
-                    tw_ice,
-                    model_version,
-                    params):
+                  t_ty,
+                  th, 
+                  tw_init, 
+                  tw_ice,
+                  model_version,
+                  params):
     """Implementation of the air2water model.
     
     
@@ -64,8 +64,8 @@ def run_air2water(ta,
         a4 = params['a4']
         a5 = params['a5']
         a6 = params['a6']
-        a7 = 0
-        a8 = 0
+        a7 = np.float64(0.0)
+        a8 = np.float64(0.0)
     elif model_version == "8p":
         a1 = params['a1']
         a2 = params['a2']
@@ -88,7 +88,6 @@ def run_air2water(ta,
     # Use the forward RK45 explicit solution
     # time step dt = 1 day
     for t in range(1, num_timesteps):
-        # try:      
         k1 = _a2w(a1, a2, a3, a4, a5, a6, a7, a8,
                     ta[t-1], tw[t-1], t_ty[t-1], th)
         
