@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "air2waterpy"
+version = "1.0.0"
+authors = [
+  { name="Xinchen He", email="xinchenhe@umass.edu" },
+]
+description = "Air2water model in python and accelerated with numba"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "hhttps://github.com/he134543/air2waterpy"
+Issues = "https://github.com/he134543/air2waterpy/issues"

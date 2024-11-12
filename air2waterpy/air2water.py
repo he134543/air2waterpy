@@ -1,9 +1,6 @@
-import numbers
 import numpy as np
 import pandas as pd
-from scipy import optimize
 from pyswarms.single.global_best import GlobalBestPSO
-from multiprocessing import Pool
 from joblib import Parallel, delayed
 from functools import partial
 from .air2water_model import run_air2water
@@ -13,13 +10,11 @@ from .gen_params import get_param_bound, find_wider_range
 
 class air2water():
     """Interface to the the air2water model.
-    This model implements the 8-parameter version of air2water model
+    This model implements the 6/8-parameter version of air2water model
     Original Publication:
         Piccolroaz S., M. Toffolon, and B. Majone (2013), 
         A simple lumped model to convert air temperature into surface water temperature in lakes, 
         Hydrol. Earth Syst. Sci., 17, 3323-3338, doi:10.5194/hess-17-3323-2013
-    Args:
-        params: (optional) Dictonary containing all model parameters as a seperate key/value pairs.
     """
     def __init__(self,
                  params=None,

@@ -3,7 +3,6 @@ This module contains functions to calculate evaluation metrics
 '''
 
 import numpy as np
-from scipy.stats.stats import pearsonr
 
 
 def calc_mse(obs, sim):
