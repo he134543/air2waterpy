@@ -22,8 +22,6 @@ pip install air2waterpy
 
 # Quick Start
 
-[Example jupyter notebook](examples/example_usage.ipynb)
-
 ```python
 import pandas as pd
 from air2waterpy import air2water
@@ -55,4 +53,3 @@ model.load_params(dict(zip(model._param_list, joint_vars)))
 plt.scatter(val_period, val_df.tw)
 plt.plot(val_tw_sim, color = "k")
 ```
-![exampleimg](examples/example_img.png)

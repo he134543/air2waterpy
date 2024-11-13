@@ -12,12 +12,14 @@ setup(
         'numpy>=2.0.2',
         'pandas>=2.2.3',
         'pyswarms>=1.3.0',
-        'numba>=0.60.0'
+        'numba>=0.60.0',
+        'joblib>=1.4.2'
         ],
     license="MIT-License",
     classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Intended Audience :: Education",
-        "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: MIT License"]
+          'Programming Language :: Python :: 3.12',
+          'License :: OSI Approved :: MIT License',
+          'Topic :: Scientific/Engineering',
+          'Intended Audience :: Science/Research'
+        ]
     )

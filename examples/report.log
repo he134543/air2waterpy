@@ -1,0 +1,8 @@
+2024-11-13 17:21:17,619 - pyswarms.single.global_best - INFO - Optimize for 500 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.9}
+2024-11-13 17:22:31,925 - pyswarms.single.global_best - INFO - Optimization finished | best cost: 3.577508676489794, best pos: [3.53302348e-01 4.27793361e-02 1.17024504e-01 6.56335079e+00
+ 6.37556204e-01 7.07800520e-01 7.49773863e+01 4.94466572e-01]
+2024-11-13 17:35:06,749 - pyswarms.single.global_best - INFO - Optimize for 500 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.9}
+2024-11-13 17:36:20,594 - pyswarms.single.global_best - INFO - Optimization finished | best cost: 3.4182587715279484, best pos: [3.09599054e-01 3.99752121e-02 9.71282571e-02 5.84602422e+00
+ 4.43078295e-01 7.26752044e-01 1.30934671e+02 1.74782474e-01]
+2024-11-13 17:43:50,615 - ipykernel.comm - ERROR - No such comm target registered: jupyter.widget.control
+2024-11-13 17:43:50,624 - Comm - WARNING - No such comm: 72d09ba3-7807-450d-8395-2c6e5cbc8f05
