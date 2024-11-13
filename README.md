@@ -16,6 +16,15 @@ Main features of this python package:
 
 # Installation
 
+Recommend using python 3.12.
+
+Dependencies:
+- numpy
+- pandas
+- numba
+- joblib
+- pyswarms
+
 ```{bash}
 pip install air2waterpy
 ```

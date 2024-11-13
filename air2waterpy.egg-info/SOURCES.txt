@@ -1,6 +1,5 @@
 LICENSE
 README.md
-project.toml
 setup.py
 air2waterpy/__init__.py
 air2waterpy/air2water.py
@@ -12,6 +11,3 @@ air2waterpy.egg-info/SOURCES.txt
 air2waterpy.egg-info/dependency_links.txt
 air2waterpy.egg-info/requires.txt
 air2waterpy.egg-info/top_level.txt
-data/superior.csv
-test/Untitled.ipynb
-test/.ipynb_checkpoints/Untitled-checkpoint.ipynb
