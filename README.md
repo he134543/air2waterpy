@@ -1,5 +1,5 @@
 # air2waterpy
-**air2waterpy** is a Python package implementing the air2water model (Piccolroaz et al., 2013), a lump model for simulating lake surface water temperature (LSWT) based on air temperature. The original air2water model is written in Fortran, [link to the repo](https://github.com/marcotoffolon/air2water). In this pacakge, we rewrote the model code with [numpy](https://numpy.org/) and [numba](https://numba.pydata.org/) which can allow users who are more familar with python to implement an air2water model in few lines of code. The code structure is adapted from the Rainfall-Runoff modelling playground ([RRMPG](https://github.com/kratzert/RRMPG)).
+**air2waterpy** is a Python package implementing the air2water model (Piccolroaz et al., 2013) for simulating lake surface water temperature (LSWT) with only air temperature as model input. The original air2water model is written in Fortran, [link to the repo](https://github.com/marcotoffolon/air2water). In this pacakge, we rewrote the model code with [numpy](https://numpy.org/) and [numba](https://numba.pydata.org/) which can allow users who are more familar with python to implement an air2water model in few lines of code. The code structure is adapted from the Rainfall-Runoff modelling playground ([RRMPG](https://github.com/kratzert/RRMPG)).
 
 
 # Main features
@@ -60,6 +60,14 @@ cost, joint_vars = model.pso_fit(cal_df.tw.to_numpy(), cal_df.ta, cal_period, n_
 # load parameters
 model.load_params(dict(zip(model._param_list, joint_vars)))
 
+# simulate water temperature during validation period
+val_tw_sim = model.simulate(val_df.ta, 
+                            val_period,
+                            th = 4.0,
+                            tw_init = 1.0,
+                            tw_ice = 0.0, 
+                            )
+                            
 # plot the simulation performance
 plt.scatter(val_period, val_df.tw)
 plt.plot(val_tw_sim, color = "k")
