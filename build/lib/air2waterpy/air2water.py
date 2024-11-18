@@ -158,7 +158,7 @@ class air2water():
         if self._model_version == "8p":
             for i in range(8):
                 self._default_bounds[self._param_list[i]] = find_wider_range(bnds_deep[i], bnds_shallow[i])
-        elif self._model_version == "8p":
+        elif self._model_version == "6p":
             for i in range(6):
                 self._default_bounds[self._param_list[i]] = find_wider_range(bnds_deep[i], bnds_shallow[i])
         else:
