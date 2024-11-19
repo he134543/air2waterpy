@@ -3,7 +3,7 @@ import pandas as pd
 from pyswarms.single.global_best import GlobalBestPSO
 from joblib import Parallel, delayed
 from functools import partial
-from .air2water_model import run_air2water
+from .air2water_model import run_air2water_6p, run_air2water_8p
 from .metrics import calc_mse, calc_nse, calc_r2
 from .gen_params import get_param_bound, find_wider_range
 
@@ -197,8 +197,15 @@ class air2water():
         # use model params
         params = self.params[0]
         
+        if self._model_version == "6p":
+            run_air2water = run_air2water_6p
+        elif self._model_version == "8p":
+            run_air2water = run_air2water_8p
+        else:
+            raise ValueError("Select correct model version: '6p' or '8p'")
+        
         # call simulation function given the parameter
-        tw = run_air2water(ta, t_ty, th, tw_init, tw_ice, self._model_version, params)
+        tw = run_air2water(ta, t_ty, th, tw_init, tw_ice, params)
 
         # build pandas dataframe
         tw = pd.DataFrame(tw, index = period, columns = ["tw_sim"])
@@ -297,6 +304,7 @@ def _loss_pso(X, input_args):
         params['a4'] = X[:, 3]
         params['a5'] = X[:, 4]
         params['a6'] = X[:, 5]
+        run_air2water = run_air2water_6p
     elif model_version == "8p":
         params['a1'] = X[:, 0]
         params['a2'] = X[:, 1]
@@ -306,14 +314,17 @@ def _loss_pso(X, input_args):
         params['a6'] = X[:, 5]
         params['a7'] = X[:, 6]
         params['a8'] = X[:, 7]
+        run_air2water = run_air2water_8p
+    else:
+        raise ValueError("Select correct model version, '6p' or '8p'")
     
     # run air2water model for particle times get the results
     if n_cpus > 1:
         # parallel
-        foo_ = partial(run_air2water, ta, t_ty, th, tw_init, tw_ice, model_version)
+        foo_ = partial(run_air2water, ta, t_ty, th, tw_init, tw_ice,)
         tws = Parallel(n_jobs=n_cpus)(delayed(foo_)(i) for i in params)
     elif n_cpus == 1:
-        tws = [run_air2water(ta, t_ty, th, tw_init, tw_ice, model_version, params[n]) for n in range(n_particles)]
+        tws = [run_air2water(ta, t_ty, th, tw_init, tw_ice, params[n]) for n in range(n_particles)]
     else:
         raise ValueError("Choose a positive number of the n_cpus")
     

@@ -16,9 +16,10 @@ def calc_mse(obs, sim):
     # Validation check on the input arrays  
     if len(obs) != len(sim):
         raise ValueError("Arrays must have the same size.")
-    # drop nan and negative temperature from the observation  
-    obs = obs[obs>=0]
-    sim = sim[obs>=0]
+    # drop nan and negative temperature from the observation
+    nan_index = obs>=0  
+    obs = obs[nan_index]
+    sim = sim[nan_index]
     
     # Calculate the rmse value
     mse_val = np.mean((obs-sim)**2)
@@ -38,8 +39,9 @@ def calc_nse(obs, sim):
         raise ValueError("Arrays must have the same size.")
     
     # drop nan and negative temperature from the observation  
-    obs = obs[obs>=0]
-    sim = sim[obs>=0]
+    nan_index = obs>=0  
+    obs = obs[nan_index]
+    sim = sim[nan_index]
     
     # denominator of the fraction term
     denominator = np.sum((obs-np.mean(obs))**2)
@@ -62,8 +64,9 @@ def calc_r2(obs, sim):
         raise ValueError("Arrays must have the same size.")
     
     # drop nan and negative temperature from the observation  
-    obs = obs[obs>=0]
-    sim = sim[obs>=0]
+    nan_index = obs>=0  
+    obs = obs[nan_index]
+    sim = sim[nan_index]
     
     # denominator and numerator
     ss_res = np.sum((obs - sim)**2)

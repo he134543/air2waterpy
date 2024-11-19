@@ -4,7 +4,7 @@ long_description = "A python pacakge implementing an air2water model. Numba is u
 
 setup(
     name="air2waterpy",
-    version="0.0.2",
+    version="0.0.3",
     author="Xinchen He",
     author_email="xinchenhe@umass.edu",
     description="A python pacakge for running the air2water model",
